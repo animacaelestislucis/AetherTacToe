@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>✦ AETHER TAC TOE | ETERNAL DUEL ✦</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+  <style>
+    :root {
+  --primary-gold: #f59e0b;
+  --primary-cyan: #4ecdc4;
+  --primary-pink: #ef476f;
+  --dark-bg: #03060c;
+  --glass-dark: rgba(15, 25, 45, 0.75);
+  --glass-light: rgba(255,255,255,0.82);
+  --shadow-gold: 0 0 30px rgba(245, 158, 11, 0.35);
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.5s ease, color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+    body.dark {
+      background: radial-gradient(ellipse at 30% 20%, #0a0f1e, #03060c);
+      color: #f0f3fa;
+    }
+
+    body.light {
+      background: radial-gradient(ellipse at 30% 20%, #f0f4ff, #e2e8f0);
+      color: #0f172a;
+    }
+
+    .glass-panel {
+      backdrop-filter: blur(16px);
+      border-radius: 2rem;
+      transition: all 0.3s;
+    }
+
+    body.dark .glass-panel {
+      background: rgba(15, 25, 45, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    body.light .glass-panel {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-pro {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  border-radius: 3rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0.8rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+    .btn-pro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-pro:hover::before {
+  left: 100%;
+}
+
+.btn-pro:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.game-square {
+  border-radius: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.2rem;
+  font-weight: 800;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+  animation: squareAppear 0.4s ease;
+}
+
+@keyframes squareAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.game-square:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+    body.dark .game-square {
+      background: rgba(25, 35, 65, 0.95);
+      border: 1px solid rgba(255, 200, 100, 0.35);
+    }
+
+    body.light .game-square {
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+    }
+    .opening-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: radial-gradient(circle at center, #0f172a, #020617);
+  animation: fadeOpening 2.5s ease forwards;
+}
+
+.opening-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2.2rem, 8vw, 5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFD966, #EF476F, #4ecdc4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 4px;
+  animation: zoomGlow 2s ease infinite alternate;
+  text-align: center;
+}
+
+.opening-subtitle {
+  color: rgba(255,255,255,0.75);
+  margin-top: 1rem;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+@keyframes fadeOpening {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@keyframes zoomGlow {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+  100% {
+    transform: scale(1.05);
+    text-shadow: 0 0 35px rgba(255, 217, 102, 0.5);
+  }
+}
+    .game-square:hover {
+      transform: scale(1.02);
+    }
+
+    body.dark .game-square:hover {
+      background: rgba(70, 100, 170, 0.95);
+    }
+
+    body.light .game-square:hover {
+      background: #ffffff;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .win-highlight {
+      animation: winPulse 0.5s infinite alternate;
+    }
+
+    body.dark .win-highlight {
+      background: radial-gradient(circle, #ffdd88, #ff9933);
+      border: 2px solid #ffcc44;
+      box-shadow: 0 0 35px 6px #ffaa33;
+    }
+
+    body.light .win-highlight {
+      background: radial-gradient(circle, #ffe6b3, #ffb347);
+      border: 2px solid #ffaa44;
+      box-shadow: 0 0 28px 5px #ffbb55;
+    }
+
+    @keyframes winPulse {
+      0% { filter: brightness(1); transform: scale(1); }
+      100% { filter: brightness(1.12); transform: scale(1.02); }
+    }
+    .floating-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.18;
+  z-index: -1;
+  animation: floatOrb 10s ease-in-out infinite alternate;
+}
+.orb1 {
+  width: 220px;
+  height: 220px;
+  background: #ef476f;
+  top: 10%;
+  left: 5%;
+}
+
+.orb2 {
+  width: 260px;
+  height: 260px;
+  background: #4ecdc4;
+  bottom: 10%;
+  right: 5%;
+}
+
+.orb3 {
+  width: 180px;
+  height: 180px;
+  background: #f59e0b;
+  top: 50%;
+  left: 45%;
+}
+@keyframes floatOrb {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(1);
+  }
+  100% {
+    transform: translateY(-30px) translateX(20px) scale(1.08);
+  }
+}
+
+    /* RESULT PAGE - FULL SCREEN MODAL */
+    .result-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(20px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    body.light .result-overlay {
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .result-card {
+      background: linear-gradient(145deg, #1e1a2f, #0a0815);
+      border-radius: 3rem;
+      padding: 2.5rem 3rem;
+      text-align: center;
+      border: 4px solid;
+      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-width: 90%;
+      width: 500px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    body.light .result-card {
+      background: linear-gradient(145deg, #fff8e7, #ffefcf);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .result-card.win {
+      border-color: #ffd966;
+      box-shadow: 0 0 80px rgba(255, 200, 0, 0.5);
+    }
+
+    .result-card.lose {
+      border-color: #ff6b6b;
+      box-shadow: 0 0 80px rgba(255, 107, 107, 0.4);
+    }
+
+    .result-card.draw {
+      border-color: #4ecdc4;
+      box-shadow: 0 0 80px rgba(78, 205, 196, 0.4);
+    }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .result-icon {
+      font-size: 5.5rem;
+      margin-bottom: 0.5rem;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .result-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin: 0.5rem 0;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+    body.dark .result-title.win-text { color: #ffd966; text-shadow: 0 0 30px rgba(255, 217, 102, 0.5); }
+    body.dark .result-title.lose-text { color: #ff8a8a; text-shadow: 0 0 30px rgba(255, 138, 138, 0.5); }
+    body.dark .result-title.draw-text { color: #4ecdc4; text-shadow: 0 0 30px rgba(78, 205, 196, 0.5); }
+    body.light .result-title.win-text { color: #d97706; }
+    body.light .result-title.lose-text { color: #dc2626; }
+    body.light .result-title.draw-text { color: #0d9488; }
+
+    .result-message {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin: 0.5rem 0 1.5rem 0;
+      line-height: 1.5;
+    }
+
+    .result-scores {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 2rem;
+      padding: 1.2rem;
+      margin: 1.2rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    body.light .result-scores {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .score-box {
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .score-value {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .score-name {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-top: 0.25rem;
+    }
+
+    .result-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .btn-result-play {
+      background: linear-gradient(135deg, #f59e0b, #e67e22);
+      color: #1e1a2f;
+      padding: 0.9rem 2rem;
+      border-radius: 3rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-result-play:hover {
+      transform: scale(1.08);
+      background: linear-gradient(135deg, #ffb347, #f39c12);
+      box-shadow: 0 0 25px gold;
+    }
+
+    .btn-result-menu {
+      background: rgba(71, 85, 105, 0.9);
+      color: white;
+      padding: 0.9rem 2rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1.1rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-result-menu:hover {
+      transform: scale(1.08);
+      background: rgba(100, 116, 139, 0.95);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .status-bar {
+      backdrop-filter: blur(24px);
+      border-radius: 4rem;
+      padding: 0.8rem 2rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      border-left: 5px solid #f59e0b;
+    }
+
+    body.dark .status-bar {
+      background: rgba(0, 0, 0, 0.6);
+      color: #FFE8C7;
+    }
+
+    body.light .status-bar {
+      background: rgba(255, 248, 225, 0.9);
+      color: #78350f;
+    }
+
+    .history-entry {
+      margin: 8px 0;
+      padding: 8px 14px;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    body.dark .history-entry {
+      background: rgba(255, 215, 150, 0.12);
+    }
+
+    body.light .history-entry {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .history-entry:hover {
+      background: rgba(245, 158, 11, 0.35);
+      transform: translateX(5px);
+    }
+
+    .history-scroll {
+      max-height: 190px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .history-scroll::-webkit-scrollbar { width: 4px; }
+    .history-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    .history-scroll::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 10px; }
+
+    @media (max-width: 900px) {
+  .result-card {
+    width: 92%;
+    padding: 2rem 1.3rem;
+    border-radius: 2rem;
+  }
+
+  .result-title {
+    font-size: 2rem;
+  }
+
+  .result-icon {
+    font-size: 4rem;
+  }
+
+  .status-bar {
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+    gap: 0.6rem;
+    text-align: center;
+  }
+
+  .game-square {
+    font-size: 1.9rem;
+  }
+}
+    @media (max-width: 600px) {
+  .result-buttons {
+    flex-direction: column;
+  }
+
+  .btn-result-play,
+  .btn-result-menu,
+  .btn-pro {
+    width: 100%;
+  }
+
+  .result-scores {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .glass-panel {
+    border-radius: 1.5rem;
+  }
+}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+  const { useState, useEffect } = React;
+
+  // ========== SOUND SYSTEM ==========
+  const sound = {
+    ctx: null,
+    ready: false,
+    init() {
+      if (!this.ctx && window.AudioContext) {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.ready = true;
+      }
+    },
+    playTap() {
+      if (!this.ready) return;
+      try {
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 587.33;
+        gain.gain.value = 0.12;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+        osc.stop(now + 0.25);
+      } catch(e) {}
+    },
+    playWin() {
+      if (!this.ready) return;
+      try {
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'triangle';
+          osc.frequency.value = f;
+          gain.gain.value = 0.15;
+          osc.start(now + i * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.12 + 0.6);
+          osc.stop(now + i * 0.12 + 0.6);
+        });
+      } catch(e) {}
+    },
+    playLose() {
+      if (!this.ready) return;
+      try {
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.type = 'sawtooth';
+        osc.frequency.value = 261.63;
+        gain.gain.value = 0.1;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+        osc.stop(now + 0.7);
+      } catch(e) {}
+    },
+    playDraw() {
+      if (!this.ready) return;
+      try {
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 329.63;
+        gain.gain.value = 0.1;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+        osc.stop(now + 0.6);
+      } catch(e) {}
+    }
+  };
+
+  // ========== WIN DETECTION ==========
+  const getWinner = (board, size) => {
+    const lines = [];
+    for (let i = 0; i < size; i++) {
+      let row = []; for (let j = 0; j < size; j++) row.push(i * size + j);
+      lines.push(row);
+    }
+    for (let i = 0; i < size; i++) {
+      let col = []; for (let j = 0; j < size; j++) col.push(j * size + i);
+      lines.push(col);
+    }
+    let diag1 = []; for (let i = 0; i < size; i++) diag1.push(i * size + i);
+    lines.push(diag1);
+    let diag2 = []; for (let i = 0; i < size; i++) diag2.push(i * size + (size - 1 - i));
+    lines.push(diag2);
+    for (let line of lines) {
+      const val = board[line[0]];
+      if (val && line.every(idx => board[idx] === val)) return { winner: val, line };
+    }
+    return { winner: null, line: null };
+  };
+
+  const isBoardFull = (board) => board.every(cell => cell !== null);
+
+  // ========== AI MOVE ==========
+  const getAIMove = (board, size, difficulty, aiSym, playerSym) => {
+    const empty = board.reduce((arr, v, i) => v === null ? [...arr, i] : arr, []);
+    if (empty.length === 0) return null;
+    if (difficulty === 'easy') return empty[Math.floor(Math.random() * empty.length)];
+    const tryWinBlock = (symbol) => {
+      for (let idx of empty) {
+        let copy = [...board];
+        copy[idx] = symbol;
+        if (getWinner(copy, size).winner === symbol) return idx;
+      }
+      return null;
+    };
+    if (difficulty === 'medium') {
+      let win = tryWinBlock(aiSym);
+      if (win !== null) return win;
+      let block = tryWinBlock(playerSym);
+      if (block !== null) return block;
+      return empty[Math.floor(Math.random() * empty.length)];
+    }
+    if (difficulty === 'hard') {
+      let win = tryWinBlock(aiSym);
+      if (win !== null) return win;
+      let block = tryWinBlock(playerSym);
+      if (block !== null) return block;
+      const center = Math.floor(size/2) * size + Math.floor(size/2);
+      if (empty.includes(center)) return center;
+      const corners = [0, size-1, size*(size-1), size*size-1];
+      const cornerChoice = corners.find(c => empty.includes(c));
+      if (cornerChoice !== undefined) return cornerChoice;
+      return empty[0];
+    }
+    return empty[0];
+  };
+
+  // Theme
+  const getTheme = () => localStorage.getItem('game_theme') === 'light' ? 'light' : 'dark';
+  const setThemeStore = (t) => localStorage.setItem('game_theme', t);
+
+  const Square = ({ value, onClick, isWinning, disabled }) => (
+    <div className={`game-square ${isWinning ? 'win-highlight' : ''}`} onClick={disabled ? undefined : onClick} style={{ cursor: disabled ? 'default' : 'pointer' }}>
+      {value === 'X' && <span>❌</span>}
+      {value === 'O' && <span>⭕</span>}
+    </div>
+  );
+
+  // ========== RESULT PAGE COMPONENT ==========
+  const ResultPage = ({ type, message, playerName, opponentName, scores, onPlayAgain, onMainMenu }) => {
+    const getCardClass = () => {
+      if (type === 'win') return 'result-card win';
+      if (type === 'lose') return 'result-card lose';
+      return 'result-card draw';
+    };
+    const getIcon = () => {
+      if (type === 'win') return '🏆';
+      if (type === 'lose') return '💔';
+      return '🤝';
+    };
+    const getTitle = () => {
+      if (type === 'win') return 'VICTORY!';
+      if (type === 'lose') return 'DEFEAT!';
+      return 'DRAW!';
+    };
+    const getTitleClass = () => {
+      if (type === 'win') return 'result-title win-text';
+      if (type === 'lose') return 'result-title lose-text';
+      return 'result-title draw-text';
+    };
+
+    return (
+      <div className="result-overlay">
+        <div className={getCardClass()}>
+          <div className="result-icon">{getIcon()}</div>
+          <div className={getTitleClass()}>{getTitle()}</div>
+          <div className="result-message">{message}</div>
+          <div className="result-scores">
+            <div className="score-box">
+              <div className="score-value">❌ {scores.X}</div>
+              <div className="score-name">{playerName}</div>
+            </div>
+            <div className="score-box">
+              <div className="score-value">⭕ {scores.O}</div>
+              <div className="score-name">{opponentName}</div>
+            </div>
+            <div className="score-box">
+              <div className="score-value">🤝 {scores.draws}</div>
+              <div className="score-name">Draws</div>
+            </div>
+          </div>
+          <div className="result-buttons">
+            <button className="btn-result-play" onClick={onPlayAgain}>
+              <i className="fas fa-redo-alt"></i> PLAY AGAIN
+            </button>
+            <button className="btn-result-menu" onClick={onMainMenu}>
+              <i className="fas fa-home"></i> MAIN MENU
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ========== MAIN GAME ==========
+  const Game = ({ mode, aiDifficulty, playerStarts, playerName, opponentName, onExit }) => {
+    const [size, setSize] = useState(3);
+    const [board, setBoard] = useState(Array(9).fill(null));
+    const [xTurn, setXTurn] = useState(playerStarts);
+    const [winner, setWinner] = useState(null);
+    const [winLine, setWinLine] = useState(null);
+    const [gameActive, setGameActive] = useState(true);
+    const [showResult, setShowResult] = useState(false);
+    const [resultType, setResultType] = useState(null);
+    const [resultMessage, setResultMessage] = useState('');
+    const [scores, setScores] = useState(() => {
+      const saved = localStorage.getItem('ttt_scores_final');
+      return saved ? JSON.parse(saved) : { X: 0, O: 0, draws: 0 };
+    });
+    const [voiceOn, setVoiceOn] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [timerActive, setTimerActive] = useState(true);
+
+    // Timer
+    useEffect(() => {
+      let interval;
+      if (timerActive && gameActive && !winner && !showResult) interval = setInterval(() => setTimer(t => t + 1), 1000);
+      return () => clearInterval(interval);
+    }, [timerActive, gameActive, winner, showResult]);
+
+    // Check winner/draw and SHOW RESULT PAGE
+    useEffect(() => {
+      if (!gameActive || showResult) return;
+      
+      const { winner: w, line } = getWinner(board, size);
+      if (w) {
+        setWinner(w);
+        setWinLine(line);
+        setGameActive(false);
+        setTimerActive(false);
+        
+        // Update scores
+        const newScores = { ...scores, [w]: scores[w] + 1 };
+        setScores(newScores);
+        localStorage.setItem('ttt_scores_final', JSON.stringify(newScores));
+        
+        sound.init();
+        
+        // Prepare result based on mode
+        if (mode === 'ai') {
+          const isPlayerWinner = (w === (playerStarts ? 'X' : 'O'));
+          if (isPlayerWinner) {
+            setResultType('win');
+  setResultMessage(`✨ AMAZING! ${playerName} defeated the AI Master! ✨`);
+  sound.playWin();
+  confetti({
+    particleCount: 300,
+    spread: 120,
+    origin: { y: 0.5 }
+  });
+} else {
+  setResultType('lose');
+  setResultMessage(`💀 AI outsmarted you! Better luck next time. 💀`);
+  sound.playLose();
+}
+        } else {
+          // FRIEND MODE - Always show win result page
+          const winnerName = w === 'X' ? playerName : opponentName;
+          setResultType('win');
+          setResultMessage(`🏆 ${winnerName} WINS the duel! Great battle! 🏆`);
+          sound.playWin();
+         sound.playWin();
+confetti({
+  particleCount: 280,
+  spread: 110,
+  origin: { y: 0.5 }
+});
+        }
+        setShowResult(true);
+      } 
+      else if (isBoardFull(board)) {
+        // DRAW
+        setGameActive(false);
+        setTimerActive(false);
+        setResultType('draw');
+        setResultMessage(`🤝 EPIC BATTLE! It's a DRAW! Both players fought valiantly. 🤝`);
+        sound.init();
+        sound.playDraw();
+        
+        const newScores = { ...scores, draws: scores.draws + 1 };
+        setScores(newScores);
+        localStorage.setItem('ttt_scores_final', JSON.stringify(newScores));
+        setShowResult(true);
+      }
+    }, [board, size, gameActive, showResult]);
+
+    // AI Turn
+    useEffect(() => {
+      if (!gameActive || showResult || winner) return;
+      if (mode === 'ai' && ((xTurn && !playerStarts) || (!xTurn && playerStarts))) {
+        const aiSym = playerStarts ? 'O' : 'X';
+        const playerSym = playerStarts ? 'X' : 'O';
+        if ((xTurn ? 'X' : 'O') === aiSym) {
+          const tid = setTimeout(() => {
+            if (gameActive && !winner && !isBoardFull(board) && !showResult) {
+              const move = getAIMove(board, size, aiDifficulty, aiSym, playerSym);
+              if (move !== null) handleMove(move);
+            }
+          }, 300);
+          return () => clearTimeout(tid);
+        }
+      }
+    }, [xTurn, gameActive, board, winner, showResult]);
+
+    const handleMove = (idx) => {
+      if (!gameActive || winner || board[idx] || showResult) return;
+      sound.init();
+      sound.playTap();
+      const newBoard = [...board];
+      const mark = xTurn ? 'X' : 'O';
+      newBoard[idx] = mark;
+      setBoard(newBoard);
+      setXTurn(!xTurn);
+      if (voiceOn) speak(`${mark} plays`);
+    };
+
+    const speak = (text) => {
+      if ('speechSynthesis' in window && voiceOn) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      }
+    };
+
+    const resetGame = () => {
+      const freshBoard = Array(size * size).fill(null);
+      setBoard(freshBoard);
+      setWinner(null);
+      setWinLine(null);
+      setGameActive(true);
+      setTimerActive(true);
+      setTimer(0);
+      setShowResult(false);
+      setResultType(null);
+      const randomStart = Math.random() < 0.5;
+      if (mode === 'ai') setXTurn(playerStarts ? true : randomStart);
+      else setXTurn(randomStart);
+    };
+
+    const changeSize = (newSize) => {
+      setSize(newSize);
+      const freshBoard = Array(newSize * newSize).fill(null);
+      setBoard(freshBoard);
+      setWinner(null);
+      setWinLine(null);
+      setGameActive(true);
+      setTimerActive(true);
+      setTimer(0);
+      setShowResult(false);
+      const randomStart = Math.random() < 0.5;
+      if (mode === 'ai') setXTurn(playerStarts ? true : randomStart);
+      else setXTurn(randomStart);
+    };
+
+    const undo = () => {
+      if (!gameActive || showResult) return;
+      const freshBoard = Array(size * size).fill(null);
+      setBoard(freshBoard);
+      setWinner(null);
+      setWinLine(null);
+      setTimer(0);
+      if (mode === 'ai') setXTurn(playerStarts ? true : false);
+      else setXTurn(true);
+    };
+
+    const currentPlayer = () => {
+      if (!gameActive || winner || showResult) return null;
+      const mark = xTurn ? 'X' : 'O';
+      if (mode === 'friend') return mark === 'X' ? playerName : opponentName;
+      return (mark === (playerStarts ? 'X' : 'O')) ? playerName : opponentName;
+    };
+
+    const statusText = () => {
+      if (winner) {
+        const winnerName = winner === 'X' ? playerName : opponentName;
+        return `🏆 ${winnerName} WINS! Game Over 🏆`;
+      }
+      if (isBoardFull(board) && !gameActive) return `⚖️ DRAW! Game Over ⚖️`;
+      if (!gameActive) return `⚖️ GAME OVER ⚖️`;
+      return `⚡ ${currentPlayer()} (${xTurn ? '❌' : '⭕'}) - Your Turn`;
+    };
+
+    const handlePlayAgain = () => {
+      resetGame();
+    };
+
+    const handleMainMenu = () => {
+      onExit();
+    };
+
+    return (
+      <>
+        {/* RESULT PAGE - SHOWS AFTER GAME OVER */}
+        {showResult && (
+          <ResultPage
+            type={resultType}
+            message={resultMessage}
+            playerName={playerName}
+            opponentName={opponentName}
+            scores={scores}
+            onPlayAgain={handlePlayAgain}
+            onMainMenu={handleMainMenu}
+          />
+        )}
+        
+        <div style={{ maxWidth: '1350px', margin: '0 auto', padding: '24px' }}>
+          <div className="glass-panel" style={{ marginBottom: '30px', padding: '6px 20px', borderRadius: '5rem', display: 'flex', justifyContent: 'center' }}>
+            <div className="status-bar">
+              <i className="fas fa-dragon"></i>
+              <span style={{ fontWeight: 800 }}>{statusText()}</span>
+              <i className="fas fa-crown"></i>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', justifyContent: 'center' }}>
+            <div className="glass-panel" style={{ flex: '2.5', minWidth: '320px', padding: '28px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', marginBottom: '28px' }}>
+                <button className="btn-pro" onClick={() => changeSize(3)} style={{ background: '#ff6b6b', color: 'white' }}>3x3</button>
+                <button className="btn-pro" onClick={() => changeSize(4)} style={{ background: '#4ecdc4', color: 'white' }}>4x4</button>
+                <button className="btn-pro" onClick={() => changeSize(5)} style={{ background: '#ffe66d', color: '#1e293b' }}>5x5</button>
+                <button className="btn-pro" onClick={resetGame} style={{ background: '#9b59b6', color: 'white' }}><i className="fas fa-sync-alt"></i> New Game</button>
+                <button className="btn-pro" onClick={undo} disabled={!gameActive || showResult} style={{ opacity: (!gameActive || showResult) ? 0.5 : 1, background: '#334155', color: 'white' }}>↩ Reset</button>
+                <button className="btn-pro" onClick={onExit} style={{ background: '#475569', color: 'white' }}><i className="fas fa-door-open"></i> Menu</button>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${size}, minmax(70px, 110px))`, gap: '14px' }}>
+                  {board.map((val, idx) => (
+                    <Square key={idx} value={val} onClick={() => handleMove(idx)} isWinning={winLine && winLine.includes(idx)} disabled={!gameActive || !!winner || showResult} />
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '28px', background: 'rgba(0,0,0,0.2)', borderRadius: '60px', padding: '12px 18px' }}>
+                <span><i className="fas fa-hourglass-half"></i> ⌛ {Math.floor(timer / 60)}:{(timer % 60) < 10 ? '0' + (timer % 60) : timer % 60}</span>
+                <span><i className="fas fa-chess-queen"></i> Turn: {!gameActive || showResult ? '—' : (xTurn ? '❌' : '⭕')}</span>
+              </div>
+            </div>
+
+            <div className="glass-panel" style={{ flex: '1.2', minWidth: '270px', padding: '28px' }}>
+              <h3 style={{ fontSize: '1.7rem', fontWeight: 800, marginBottom: '18px' }}><i className="fas fa-trophy"></i> SCOREBOARD</h3>
+              <div style={{ display: 'flex', gap: '16px', justifyContent: 'space-between', background: 'rgba(0,0,0,0.15)', borderRadius: '50px', padding: '14px 20px' }}>
+                <div><span style={{ fontSize: '2rem' }}>❌</span> {scores.X}<div style={{ fontSize: '0.7rem', fontWeight: 500 }}>{playerName}</div></div>
+                <div><span style={{ fontSize: '2rem' }}>⭕</span> {scores.O}<div style={{ fontSize: '0.7rem', fontWeight: 500 }}>{opponentName}</div></div>
+                <div><i className="fas fa-handshake"></i> {scores.draws}</div>
+              </div>
+              <hr style={{ margin: '20px 0', opacity: 0.2 }} />
+              <h4><i className="fas fa-scroll"></i> GAME INFO</h4>
+              <div className="history-scroll">
+                <div className="history-entry">
+                  <i className="fas fa-info-circle"></i> Game Mode: {mode === 'ai' ? 'AI Battle' : 'Friend Duel'}
+                </div>
+                <div className="history-entry">
+                  <i className="fas fa-chart-line"></i> Total Rounds: {scores.X + scores.O + scores.draws}
+                </div>
+                <div className="history-entry">
+                  <i className="fas fa-tachometer-alt"></i> Difficulty: {mode === 'ai' ? aiDifficulty : 'N/A'}
+                </div>
+              </div>
+              <div style={{ marginTop: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <button className="btn-pro" onClick={() => { setVoiceOn(!voiceOn); if (!voiceOn) speak("Voice activated"); }} style={{ background: '#1abc9c', color: 'white' }}>{voiceOn ? '🔊 Voice ON' : '🔇 Voice OFF'}</button>
+                <button className="btn-pro" onClick={() => { if (navigator.vibrate) navigator.vibrate(100); }} style={{ background: '#e67e22', color: 'white' }}><i className="fas fa-mobile-alt"></i> Vibe</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  // ========== MODE SELECTION ==========
+ const ModeSelect = ({ onSelect }) => {
+  const [theme, setTheme] = useState(getTheme());
+
+  useEffect(() => {
+    document.body.classList.toggle('light', theme === 'light');
+    document.body.classList.toggle('dark', theme === 'dark');
+    setThemeStore(theme);
+  }, [theme]);
+
+  return (
+    <>
+      <div className="floating-orb orb1"></div>
+      <div className="floating-orb orb2"></div>
+      <div className="floating-orb orb3"></div>
+
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+          position: 'relative',
+          zIndex: 2
+        }}
+      >
+        <div style={{ position: 'absolute', top: 28, right: 28 }}>
+          <button
+            aria-label="Toggle Theme"
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '2rem',
+              cursor: 'pointer'
+            }}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
+
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <h1
+            style={{
+              fontFamily: 'Orbitron, sans-serif',
+              fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
+              fontWeight: 900,
+              letterSpacing: '-3px',
+              background: 'linear-gradient(135deg, #FFD966, #EF476F, #4ecdc4)',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent',
+              textShadow: '0 0 35px rgba(255,255,255,0.08)'
+            }}
+          >
+            ✦ AETHER TAC TOE ✦
+          </h1>
+
+          <p
+            style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontWeight: 500,
+              marginTop: '12px',
+              letterSpacing: '1px',
+              opacity: 0.85
+            }}
+          >
+            Professional Arena • Epic Sound • Immersive Gameplay
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '40px',
+            flexWrap: 'wrap',
+            justifyContent: 'center'
+          }}
+        >
+          <div
+            className="glass-panel"
+            style={{
+              padding: '42px',
+              width: '310px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            onClick={() => onSelect('friend')}
+          >
+            <i
+              className="fas fa-users"
+              style={{
+                fontSize: '3.5rem',
+                color: '#4ecdc4',
+                marginBottom: '10px'
+              }}
+            ></i>
+
+            <h2
+              style={{
+                marginTop: '18px',
+                fontWeight: 800,
+                fontFamily: 'Orbitron, sans-serif'
+              }}
+            >
+              FRIEND MODE
+            </h2>
+          </div>
+
+          <div
+            className="glass-panel"
+            style={{
+              padding: '42px',
+              width: '310px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            onClick={() => onSelect('ai')}
+          >
+            <i
+              className="fas fa-microchip"
+              style={{
+                fontSize: '3.5rem',
+                color: '#ff6b6b',
+                marginBottom: '10px'
+              }}
+            ></i>
+
+            <h2
+              style={{
+                marginTop: '18px',
+                fontWeight: 800,
+                fontFamily: 'Orbitron, sans-serif'
+              }}
+            >
+              AI MODE
+            </h2>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+  const AISetup = ({ onStart }) => {
+    const [diff, setDiff] = useState('medium');
+    const [side, setSide] = useState('X');
+    const [name, setName] = useState('PLAYER');
+    return (
+      <div className="glass-panel" style={{ maxWidth: '540px', margin: '80px auto', padding: '44px', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: 700 }}>🤖 AI BATTLE SETUP</h2>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ margin: '20px', padding: '12px', borderRadius: '60px', width: '80%', textAlign: 'center', fontWeight: 500, border: '1px solid #ccc' }} />
+        <select value={diff} onChange={e => setDiff(e.target.value)} style={{ padding: '10px', borderRadius: '50px', margin: '12px', fontWeight: 500 }}><option>easy</option><option>medium</option><option>hard</option></select>
+        <div style={{ margin: '20px' }}>Play as: <button onClick={() => setSide('X')} style={{ background: side === 'X' ? '#f39c12' : '#2c3e50', padding: '8px 28px', borderRadius: '40px', margin: '6px', fontWeight: 600, color: 'white' }}>❌ X</button><button onClick={() => setSide('O')} style={{ background: side === 'O' ? '#f39c12' : '#2c3e50', padding: '8px 28px', borderRadius: '40px', fontWeight: 600, color: 'white' }}>⭕ O</button></div>
+        <button className="btn-pro" onClick={() => onStart(diff, side, name, 'AI MASTER')} style={{ background: '#e67e22', color: 'white', padding: '12px 32px', fontSize: '1.1rem' }}>⚡ START BATTLE ⚡</button>
+      </div>
+    );
+  };
+
+  const FriendSetup = ({ onStart }) => {
+    const [p1, setP1] = useState('PLAYER X');
+    const [p2, setP2] = useState('PLAYER O');
+    return (
+      <div className="glass-panel" style={{ maxWidth: '560px', margin: '80px auto', padding: '44px', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: 700 }}>👫 FRIEND MODE SETUP</h2>
+        <input value={p1} onChange={e => setP1(e.target.value)} placeholder="❌ X Player Name" style={{ margin: '12px', padding: '12px', borderRadius: '60px', width: '80%' }} />
+        <input value={p2} onChange={e => setP2(e.target.value)} placeholder="⭕ O Player Name" style={{ margin: '12px', padding: '12px', borderRadius: '60px', width: '80%' }} />
+        <button className="btn-pro" onClick={() => onStart(p1, p2)} style={{ background: '#1e90ff', color: 'white', padding: '12px 28px', marginTop: '18px' }}>START DUEL</button>
+      </div>
+    );
+  };
+
+    const OpeningScreen = () => {
+  return (
+    <div className="opening-screen">
+      <div className="opening-logo">✦ AETHER TAC TOE ✦</div>
+      <div className="opening-subtitle">ETERNAL DUEL:Conquer the Cosmic Grid</div>
+    </div>
+  );
+};
+
+  const App = () => {
+  const [stage, setStage] = useState('mode');
+  const [gameProps, setGameProps] = useState(null);
+  const [showOpening, setShowOpening] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOpening(false);
+    }, 2400);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showOpening) {
+    return (
+      <>
+        <div className="floating-orb orb1"></div>
+        <div className="floating-orb orb2"></div>
+        <div className="floating-orb orb3"></div>
+        <OpeningScreen />
+      </>
+    );
+  }
+
+  if (stage === 'mode') {
+    return (
+      <ModeSelect
+        onSelect={(mode) => {
+          if (mode === 'ai') {
+            setStage('aiSetup');
+          } else {
+            setStage('friendSetup');
+          }
+        }}
+      />
+    );
+  }
+
+  if (stage === 'aiSetup') {
+    return (
+      <AISetup
+        onStart={(difficulty, side, playerName, opponentName) => {
+          setGameProps({
+            mode: 'ai',
+            aiDifficulty: difficulty,
+            playerStarts: side === 'X',
+            playerName,
+            opponentName
+          });
+          setStage('game');
+        }}
+      />
+    );
+  }
+
+  if (stage === 'friendSetup') {
+    return (
+      <FriendSetup
+        onStart={(player1, player2) => {
+          setGameProps({
+            mode: 'friend',
+            aiDifficulty: null,
+            playerStarts: true,
+            playerName: player1,
+            opponentName: player2
+          });
+          setStage('game');
+        }}
+      />
+    );
+  }
+
+  if (stage === 'game' && gameProps) {
+    return (
+      <Game
+        {...gameProps}
+        onExit={() => {
+          setStage('mode');
+          setGameProps(null);
+        }}
+      />
+    );
+  }
+
+  return null;
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+</script>
+</body>
+</html>
